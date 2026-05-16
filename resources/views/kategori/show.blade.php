@@ -1,7 +1,7 @@
 @include('layout.header')
 <!-- Header -->
 
-<h3>Kategori</h3>
+<h3>Detail Kategori</h3>
 <table>
     <tbody>
         <tr>

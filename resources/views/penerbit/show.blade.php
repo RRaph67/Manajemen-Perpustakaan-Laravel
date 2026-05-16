@@ -1,7 +1,7 @@
 @include('layout.header')
 <!-- Header -->
 
-<h3>Penerbit</h3>
+<h3>Detail Penerbit</h3>
 <table>
     <tbody>
         <tr>

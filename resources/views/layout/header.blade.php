@@ -11,6 +11,13 @@
 <body>
     <div class="container">
         <h1>Manajemen Perpustakaan</h1>
+        @if (Auth::check())
+        <p>Anda Login Sebagai <strong>{{ Auth::user()->name }}</strong></p>
+        <form action="{{ route('logoutProses') }}" method="post">
+            @csrf
+            <button type="submit" class="tombol">Logout</button>
+        </form>
+        @endif
         <div class="nav">
             <ul>
                 <li><a href="/kategori">Kategori</a></li>
