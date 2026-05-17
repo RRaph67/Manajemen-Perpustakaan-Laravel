@@ -6,6 +6,7 @@ use App\Models\buku;
 use App\Models\kategori;
 use App\Models\penerbit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class BukuController extends Controller
 {
@@ -27,7 +28,7 @@ class BukuController extends Controller
         //
         $penerbit = penerbit::all();
         $kategori = kategori::all();
-        return view("buku.create", compact("penerbit","kategori"));
+        return view("buku.create", compact("penerbit", "kategori"));
     }
 
     /**
@@ -35,18 +36,22 @@ class BukuController extends Controller
      */
     public function store(Request $request)
     {
-        // Validation
         $validateData = $request->validate([
             "judul" => "required|max:100",
             "pengarang" => "required|max:100",
-            "tahun_terbit" => "required|int:4",
+            "tahun_terbit" => "required|integer",
             "kategori_id" => "required",
             "penerbit_id" => "required",
+            "file_cover" => "nullable|image|mimes:jpeg,jpg,png|max:1024",
         ]);
-        // Save Data
+
+        if ($request->hasFile('file_cover')) {
+            $validateData['cover'] = $request->file('file_cover')->store('cover', 'public');
+        }
+        unset($validateData['file_cover']);
+
         buku::create($validateData);
 
-        // Redirect
         return redirect()->route("buku.index");
     }
 
@@ -82,9 +87,22 @@ class BukuController extends Controller
             "tahun_terbit" => "required|int:4",
             "kategori_id" => "required",
             "penerbit_id" => "required",
+            "file_cover" => "nullable|image|mimes:jpeg,jpg,png|max:1024",
         ]);
 
-        // Update
+        // Upload File
+        if ($request->hasFile('file_cover')) {
+            $validateData['cover'] = $request->file('file_cover')->store('cover', 'public');
+
+            if ($request->cover_lama) {
+                Storage::delete('public/' . $request->cover_lama);
+            }
+        }
+
+        // Hapus field file_cover agar tidak error mass assignment
+        unset($validateData['file_cover']);
+
+        // Update ke database
         $buku->update($validateData);
 
         // Redirect
@@ -96,7 +114,11 @@ class BukuController extends Controller
      */
     public function destroy(buku $buku)
     {
-        // 
+        if ($buku->cover && Storage::exists('public/'.$buku->cover)) {
+            Storage::delete('public/'.$buku->cover);
+        }
+
+        // Proses Delete
         $buku->delete();
         return redirect()->route("buku.index");
     }

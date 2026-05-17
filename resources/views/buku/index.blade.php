@@ -1,12 +1,13 @@
 @include('layout.header')
 <!-- Header -->
- 
+
 <h3>Buku</h3>
 <a href="{{route('buku.create')}}" class="tombol">Tambah</a>
 <table>
     <thead>
         <tr>
             <th>No.</th>
+            <th>Cover</th>
             <th>Judul Buku</th>
             <th>Pengarang</th>
             <th>Tahun</th>
@@ -19,6 +20,11 @@
         @foreach ($allBuku as $key => $r)
         <tr>
             <td>{{ $key +1 }}</td>
+            <td>
+                @if ($r->cover)
+                <img src="{{ asset('storage/'.$r->cover) }}" alt="Cover" width="80">
+                @endif
+            </td>
             <td>{{ $r->judul }}</td>
             <td>{{ $r->pengarang }}</td>
             <td>{{ $r->tahun_terbit }}</td>

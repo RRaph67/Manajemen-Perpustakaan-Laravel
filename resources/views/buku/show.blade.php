@@ -2,6 +2,11 @@
 <!-- Header -->
 
 <h3>Deatil Buku</h3>
+@if ($buku->cover)
+    <div class="" style="text-align: center;">
+        <img src="{{ asset('storage/'.$buku->cover) }}" alt="" width="160">
+    </div>
+@endif
 <table>
     <tbody>
         <tr>

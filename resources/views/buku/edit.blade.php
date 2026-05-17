@@ -2,7 +2,7 @@
 <!-- Header -->
 
 <h3>Edit Buku</h3>
-<form action="{{ route('buku.update', $buku->id) }}" method="post">
+<form action="{{ route('buku.update', $buku->id) }}" method="post" enctype="multipart/form-data">
     @csrf
     @method('PUT')
     <div class="form-group">
@@ -35,6 +35,16 @@
             @endforeach
         </select>
     </div>
+
+    <!-- Input File -->
+    <div class="form-group">
+        <label for="">Gambar Cover</label>
+        @if ($buku->cover)
+        <img src="{{ asset('storage/'.$buku->cover) }}" alt="" width="90">
+        @endif
+        <input type="file" name="file_cover" id="">
+    </div>
+    <input type="hidden" name="cover_lama" id="" value="{{ $buku->cover }}">
     <button class="tombol" type="submit">Update</button>
 </form>
 

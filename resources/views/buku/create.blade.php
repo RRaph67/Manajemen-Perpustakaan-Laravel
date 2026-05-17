@@ -2,7 +2,7 @@
 <!-- Header -->
 
 <h3>Tambah Buku</h3>
-<form action="{{ route('buku.store') }}" method="post">
+<form action="{{ route('buku.store') }}" method="post" enctype="multipart/form-data">
     @csrf
     <div class="form-group">
         <label for="">Judul Buku</label>
@@ -33,6 +33,12 @@
             <option value="{{ $k->id }}">{{ $k->nama_kategori }}</option>
             @endforeach
         </select>
+    </div>
+
+    <!-- Input File -->
+    <div class="form-group">
+        <label for="">Gambar Cover</label>
+        <input type="file" name="file_cover" id="">
     </div>
     <button class="tombol" type="submit">Tambah</button>
 </form>
