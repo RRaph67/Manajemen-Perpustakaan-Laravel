@@ -13,10 +13,23 @@ class BukuController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
-        $allBuku = buku::all();
+
+        // Cari Buku
+        $query = $request->input("q");
+        if ($query) {
+            # code...
+            $allBuku = buku::when($query, function ($qBuilder) use ($query) {
+                $qBuilder->where("judul", "like", "%" . $query . "%")
+                    ->orWhere("pengarang", "like", "%" . $query . "%")
+                    ->orWhere("tahun_terbit", "like", "%" . $query . "%");
+            })->paginate(5);
+            $allBuku->appends(["q"=> $query]);
+        } else {
+            $allBuku = buku::latest("id")->paginate(5);
+        }
+        // $allBuku = buku::all();
         return view("buku.index", compact("allBuku"));
     }
 
@@ -114,8 +127,8 @@ class BukuController extends Controller
      */
     public function destroy(buku $buku)
     {
-        if ($buku->cover && Storage::exists('public/'.$buku->cover)) {
-            Storage::delete('public/'.$buku->cover);
+        if ($buku->cover && Storage::exists('public/' . $buku->cover)) {
+            Storage::delete('public/' . $buku->cover);
         }
 
         // Proses Delete

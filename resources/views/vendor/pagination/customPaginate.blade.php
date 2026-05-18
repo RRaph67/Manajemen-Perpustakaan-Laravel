@@ -1,0 +1,38 @@
+@if ($paginator->hasPages())
+<nav class="custom-pagination">
+    <ul>
+        {{-- Previous Page Link --}}
+        @if ($paginator->onFirstPage())
+        <li class="disabled"><span>&laquo;</span></li>
+        @else
+        <li><a href="{{ $paginator->previousPageUrl() }}" rel="prev">&laquo;</a></li>
+        @endif
+
+        {{-- Pagination Elements --}}
+        @foreach ($elements as $el)
+        {{-- "Three Dots" Separator --}}
+        @if (is_string($el))
+        <li class="disabled"><span>{{ $el }}</span></li>
+        @endif
+
+        {{-- Array Of Links --}}
+        @if (is_array($el))
+        @foreach ($el as $page => $url)
+        @if ($page == $paginator->currentPage())
+        <li class="active" aria-current="page"><span>{{ $page }}</span></li>
+        @else
+        <li><a href="{{ $url }}">{{ $page }}</a></li>
+        @endif
+        @endforeach
+        @endif
+        @endforeach
+
+        {{-- Next Page Link --}}
+        @if ($paginator->hasMorePages())
+        <li><a href="{{ $paginator->nextPageUrl() }}" rel="next">&raquo;</a></li>
+        @else
+        <li class="disabled"><span>&raquo;</span></li>
+        @endif
+    </ul>
+</nav>
+@endif

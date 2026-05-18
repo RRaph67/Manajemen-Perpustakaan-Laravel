@@ -2,7 +2,13 @@
 <!-- Header -->
 
 <h3>Buku</h3>
-<a href="{{route('buku.create')}}" class="tombol">Tambah</a>
+<div class="" style="display: flex; justify-content:space-between; align-items:center;">
+    <a href="{{route('buku.create')}}" class="tombol">Tambah</a>
+    <form action="{{ route('buku.index') }}" method="get">
+        <input type="text" name="q" id="" style="padding: 5px; margin-right: 8px;" placeholder="Cari Buku...">
+        <button type="submit" class="tombol">Cari</button>
+    </form>
+</div>
 <table>
     <thead>
         <tr>
@@ -19,7 +25,7 @@
     <tbody>
         @foreach ($allBuku as $key => $r)
         <tr>
-            <td>{{ $key +1 }}</td>
+            <td>{{ $key + $allBuku->firstItem() }}</td>
             <td>
                 @if ($r->cover)
                 <img src="{{ asset('storage/'.$r->cover) }}" alt="Cover" width="80">
@@ -43,6 +49,9 @@
         @endforeach
     </tbody>
 </table>
+<div class="" style="margin-bottom: 10px; display:flex; justify-content: center;">
+    {{ $allBuku->links('vendor.pagination.customPaginate') }}
+</div>
 
 <!-- Footer -->
 @include('layout.footer')
